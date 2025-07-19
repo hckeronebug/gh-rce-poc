@@ -8,12 +8,23 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-go@v4
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
         with:
           go-version: '1.21'
-      - run: go build -o gh-rce-poc main.go
-      - uses: softprops/action-gh-release@v1
+
+      - name: Build binary
+        run: |
+          go env
+          go version
+          go build -o gh-rce-poc main.go
+
+      - name: Upload Release
+        uses: softprops/action-gh-release@v1
         with:
           files: gh-rce-poc
