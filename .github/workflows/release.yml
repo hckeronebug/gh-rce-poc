@@ -5,6 +5,9 @@ on:
     tags:
       - '*'
 
+permissions:
+  contents: write  # REQUIRED to upload release assets
+
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -19,12 +22,11 @@ jobs:
           go-version: '1.21'
 
       - name: Build binary
-        run: |
-          go env
-          go version
-          go build -o gh-rce-poc main.go
+        run: go build -o gh-rce-poc main.go
 
       - name: Upload Release
         uses: softprops/action-gh-release@v1
         with:
           files: gh-rce-poc
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
